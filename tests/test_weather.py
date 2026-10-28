@@ -23,8 +23,12 @@ def test_parse_invalid_time():
     with pytest.raises(ValueError, match="Minute must be between 0 and 59."):
         assert parse_time("14:91")
 
+def test_parse_time_format():
     with pytest.raises(ValueError, match="Time must have HH:MM format."):
         assert parse_time("14:21:00")
+
+    with pytest.raises(ValueError, match="Time must have HH:MM format."):
+        assert parse_time("1400")
 
 
 def test_parse_measurement_regular_line():
@@ -33,6 +37,9 @@ def test_parse_measurement_regular_line():
 def test_parse_invalid_measurement():
     with pytest.raises(ValueError, match="Time must have HH:MM format"):
         assert parse_measurement("5.5;Düsseldorf;15:15") == (5.5, "Düsseldorf", 915)
+    
+    with pytest.raises(ValueError, match="City must not be empty."):
+        assert parse_measurement(";14:21;21.7")
 
 
 def test_filter_by_temperature_regular_values():
